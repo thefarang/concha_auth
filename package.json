@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "debug": "PORT=3002 ./node_modules/.bin/nodemon ./bin/www"
+    "debug": "./node_modules/.bin/nodemon ./bin/www"
   },
   "dependencies": {
     "bcrypt": "^1.0.3",
