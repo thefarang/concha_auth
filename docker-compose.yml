@@ -1,0 +1,16 @@
+version: "3"
+services:
+
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+
+  concha_auth:
+    build: .
+    volumes:
+      - ./:/app
+    ports:
+      - 3002:80
+    links:
+      - mongo

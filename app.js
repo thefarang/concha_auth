@@ -26,7 +26,7 @@ app.use((req, res, next) => {
 
 // Database connection
 // @todo replace this with config
-mongoose.connect('mongodb://localhost:27017/local', {
+mongoose.connect('mongodb://mongo:27017/local', {
   useMongoClient: true
 });
 

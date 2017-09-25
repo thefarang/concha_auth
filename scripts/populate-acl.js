@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/local');  // @todo
+mongoose.connect('mongodb://mongo:27017/local');  // @todo config
 
 let AccessControl = require('../models/access-control');
 
