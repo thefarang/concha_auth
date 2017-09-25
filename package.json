@@ -6,12 +6,10 @@
     "debug": "./node_modules/.bin/nodemon ./bin/www"
   },
   "dependencies": {
-    "bcrypt": "^1.0.3",
     "body-parser": "~1.17.1",
     "debug": "~2.6.3",
     "express": "~4.15.2",
-    "mongoose": "^4.11.12",
-    "morgan": "~1.8.1"
+    "mongoose": "^4.11.12"
   },
   "devDependencies": {
     "nodemon": "^1.12.1"

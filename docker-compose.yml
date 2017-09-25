@@ -9,7 +9,8 @@ services:
   concha_auth:
     build: .
     volumes:
-      - ./:/app
+      - ./src:/app/src
+    # command: - npm start
     ports:
       - 3002:80
     links:

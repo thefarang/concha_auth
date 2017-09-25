@@ -7,7 +7,6 @@
 // Include validation middleware on all incoming user data
 
 const express = require('express');
-const logger = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
@@ -38,7 +37,6 @@ process.on('SIGINT', () => {
   }); 
 });
 
-app.use(logger('dev')); // @todo replace with Bunyan
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const accessControl = require('./routes/access-control');
