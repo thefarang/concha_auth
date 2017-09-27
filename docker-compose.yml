@@ -2,16 +2,32 @@ version: "3"
 services:
 
   mongo:
-    image: mongo
+    container_name: mongo
+    image: mongo:3.0.15-wheezy
     ports:
+      # Expose port to host machine for debugging
       - 27017:27017
 
   concha_auth:
+    container_name: concha_auth
     build: .
     volumes:
+      # Make the following directories available to docker so that changes made on the host
+      # are immediately available inside the docker container.
       - ./src:/app/src
-    # command: - npm start
+      - ./test:/app/test
+
+      # Make package.json available to Docker so that new packages added during the test/develop
+      # lifecycle are reflected back to the host, where they can be commited to github.
+      - ./package.json:/app/package.json
+
+      # Make npm-shrinkwrap.json available to Docker so that changes made by npm shrinkwrap 
+      # in the docker container are reflected back to the host, where they can be committed to
+      # github.
+      - ./npm-shrinkwrap.json:/app/npm-shrinkwrap.json
+    command: npm run debug
     ports:
-      - 3002:80
+      # Expose port to host machine for debugging
+      - 80:80
     links:
       - mongo
