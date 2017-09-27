@@ -4,7 +4,7 @@ RUN mkdir -p /app/bin /app/src /app/test
 WORKDIR /app
 
 COPY package.json npm-shrinkwrap.json /app/
-RUN npm install --silent
+RUN npm install
 
 RUN npm cache clean --force --silent
 

@@ -5,7 +5,8 @@
   "scripts": {
     "lint": "./node_modules/.bin/standard \"src/**/*.js\"",
     "fix-style": "./node_modules/.bin/standard --fix \"src/**/*.js\"",
-    "debug": "./node_modules/.bin/nodemon ./bin/www"
+    "debug": "./node_modules/.bin/nodemon ./bin/www",
+    "test": "./node_modules/.bin/mocha"
   },
   "dependencies": {
     "body-parser": "1.17.1",
@@ -15,6 +16,9 @@
   },
   "devDependencies": {
     "standard": "10.0.3",
-    "nodemon": "1.12.1"
+    "nodemon": "1.12.1",
+    "mocha": "3.5.3",
+    "chai": "4.1.2",
+    "chai-http": "3.0.0"
   }
 }

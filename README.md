@@ -42,3 +42,11 @@ If errors are found by the linter, you can fix them as follows:
 ```
 $ npm run fix-style  
 ```
+
+
+## Testing
+Code should be developed only after the test-cases for the code have been written. Unit tests should be added to the `tests` directory, and can be as follows:
+
+```
+$ npm run test  
+```
