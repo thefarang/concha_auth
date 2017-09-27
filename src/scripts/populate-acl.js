@@ -1,14 +1,11 @@
 'use strict'
 
-const express = require('express')
-const router = express.Router()
-
 const mongoose = require('mongoose')
-mongoose.connect('mongodb://mongo:27017/local')  // @todo config
-
 let AccessControl = require('../models/access-control')
 
-const chain = new Promise((resolve, reject) => {
+mongoose.connect('mongodb://mongo:27017/local')  // @todo config
+
+new Promise((resolve, reject) => {
   AccessControl.find().remove((err) => {
     if (err) {
       return reject(err)
@@ -129,4 +126,6 @@ const chain = new Promise((resolve, reject) => {
 })
 .catch((err) => {
   console.log('An error occurred')
+  console.log(err)
+  process.exit(0)
 })
