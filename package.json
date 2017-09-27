@@ -3,15 +3,22 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "debug": "./node_modules/.bin/nodemon ./bin/www"
+    "lint": "./node_modules/.bin/standard \"src/**/*.js\"",
+    "fix-style": "./node_modules/.bin/standard --fix \"src/**/*.js\"",
+    "debug": "./node_modules/.bin/nodemon ./bin/www",
+    "test": "./node_modules/.bin/mocha"
   },
   "dependencies": {
-    "body-parser": "~1.17.1",
-    "debug": "~2.6.3",
-    "express": "~4.15.2",
-    "mongoose": "^4.11.12"
+    "body-parser": "1.17.1",
+    "debug": "2.6.3",
+    "express": "4.15.2",
+    "mongoose": "4.11.12"
   },
   "devDependencies": {
-    "nodemon": "^1.12.1"
+    "standard": "10.0.3",
+    "nodemon": "1.12.1",
+    "mocha": "3.5.3",
+    "chai": "4.1.2",
+    "chai-http": "3.0.0"
   }
 }

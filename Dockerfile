@@ -1,19 +1,15 @@
-FROM node:boron-alpine
+FROM node:8.5.0-alpine
 
-MAINTAINER thefarang
-
-RUN mkdir /app
+RUN mkdir -p /app/bin /app/src /app/test
 WORKDIR /app
 
-COPY package.json /app
+COPY package.json npm-shrinkwrap.json /app/
 RUN npm install
 
-RUN mkdir /app/bin
-COPY ./bin/www /app/bin/www
+RUN npm cache clean --force --silent
 
-RUN mkdir /app/src
+COPY ./bin/www /app/bin/www
 COPY ./src /app/src
+COPY ./test /app/test
 
 EXPOSE 80
-
-CMD ["npm", "run", "debug"]
