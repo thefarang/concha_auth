@@ -15,7 +15,10 @@ const AccessControlSchema = new Schema({
     trim: true,
     required: true
   },
-  roles: [Number]
+  roles: [{
+    type: String,
+    enum: ['guest', 'blogger', 'premium-blogger', 'serviceprovider', 'premium-serviceprovider']
+  }]
 }, {
   collection: 'acl'
 })

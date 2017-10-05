@@ -1,7 +1,7 @@
 'use strict'
 
 const mongoose = require('mongoose')
-let AccessControl = require('../models/access-control')
+const AccessControl = require('../models/access-control')
 
 mongoose.connect('mongodb://mongo:27017/local')  // @todo config
 
@@ -90,7 +90,7 @@ new Promise((resolve, reject) => {
   return new Promise((resolve, reject) => {
     const accessControl = new AccessControl()
     accessControl.resource = '/register-submit'
-    accessControl.permission = 'get'
+    accessControl.permission = 'post'
     accessControl.roles = [1]
     accessControl.save((err) => {
       if (err) {

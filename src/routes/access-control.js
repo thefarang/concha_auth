@@ -8,14 +8,15 @@ const AccessControl = require('../models/access-control')
 router.get('/', (req, res, next) => {
   AccessControl.find((err, acl) => {
     if (err) {
-      next(err)
-      return
+      return next(err)
     }
 
     if (acl.length === 0) {
-      res.set('Cache-Control', 'private, max-age=0, no-cache')
-      res.status(404).json({ message: 'Access control list not found' })
-      return
+      // We must have access controls previously set. To not have
+      // them is an error
+      const err = new Error()
+      err.status = 500
+      return next(err)
     }
 
     // @todo
@@ -28,14 +29,13 @@ router.get('/', (req, res, next) => {
 router.get('/:role', (req, res, next) => {
   AccessControl.find({ roles: req.params.role }, (err, acl) => {
     if (err) {
-      next(err)
-      return
+      return next(err)
     }
 
     if (acl.length === 0) {
-      res.set('Cache-Control', 'private, max-age=0, no-cache')
-      res.status(404).json({ message: 'Access control list not found' })
-      return
+      const err = new Error()
+      err.status = 404
+      return next(err)
     }
 
     // @todo
