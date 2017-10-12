@@ -1,9 +1,10 @@
 'use strict'
 
+const config = require('config')
 const mongoose = require('mongoose')
 const AccessControl = require('../models/access-control')
 
-mongoose.connect('mongodb://mongo:27017/local')  // @todo config
+mongoose.connect(config.get('mongoConn'))
 
 new Promise((resolve, reject) => {
   AccessControl.find().remove((err) => {

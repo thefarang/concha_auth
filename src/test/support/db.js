@@ -1,5 +1,6 @@
 'use strict'
 
+const config = require('config')
 const mongoose = require('mongoose')
 const AccessControl = require('../../models/access-control')
 
@@ -8,7 +9,7 @@ const AccessControl = require('../../models/access-control')
 const connect = () => {
   return new Promise((resolve, reject) => {
     mongoose.Promise = global.Promise
-    mongoose.connect('mongodb://mongo:27017/local', { useMongoClient: true }, (err) => {
+    mongoose.connect(config.get('mongoConn'), { useMongoClient: true }, (err) => {
       if (err) {
         return reject(err)
       }
