@@ -1,5 +1,6 @@
 'use strict'
 
+const log = require('../lib/log')
 const express = require('express')
 const router = express.Router()
 const AccessControl = require('../models/access-control')
@@ -8,6 +9,7 @@ const AccessControl = require('../models/access-control')
 router.get('/', (req, res, next) => {
   AccessControl.find((err, acl) => {
     if (err) {
+      log.info({ err: err }, 'An error occurred retrieving entire access control list')
       return next(err)
     }
 
@@ -16,6 +18,7 @@ router.get('/', (req, res, next) => {
       // them is an error
       const err = new Error()
       err.status = 500
+      log.info({ err: err }, 'No ACL was previously set')
       return next(err)
     }
 
@@ -29,12 +32,14 @@ router.get('/', (req, res, next) => {
 router.get('/:role', (req, res, next) => {
   AccessControl.find({ roles: req.params.role }, (err, acl) => {
     if (err) {
+      log.info({ err: err, role: req.params.role }, 'An error occurred retrieving a role')
       return next(err)
     }
 
     if (acl.length === 0) {
       const err = new Error()
       err.status = 404
+      log.info({ err: err, role: req.params.role }, 'No matching role found')
       return next(err)
     }
 

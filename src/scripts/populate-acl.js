@@ -1,14 +1,23 @@
 'use strict'
 
+const log = require('../lib/log')
 const config = require('config')
 const mongoose = require('mongoose')
 const AccessControl = require('../models/access-control')
+
+const logSaveError = (err, accessControl) => {
+  log.info({
+    err: err,
+    accessControl: accessControl
+  }, 'An error occurred saving an AccessControl')
+}
 
 mongoose.connect(config.get('mongoConn'))
 
 new Promise((resolve, reject) => {
   AccessControl.find().remove((err) => {
     if (err) {
+      log.info({ err: err }, 'Unable to find and remove existing objects')
       return reject(err)
     }
     resolve()
@@ -23,11 +32,11 @@ new Promise((resolve, reject) => {
     accessControl.roles = [1, 2, 3, 4, 5]
     accessControl.save((err) => {
       if (err) {
+        logSaveError(err, accessControl)
         return reject(err)
       }
 
-      console.log('Populated index access control')
-      console.log(accessControl._id)
+      log.info({ accessControlId: accessControl._id }, 'Populated index access control')
       resolve()
     })
   })
@@ -41,11 +50,11 @@ new Promise((resolve, reject) => {
     accessControl.roles = [1]
     accessControl.save((err) => {
       if (err) {
+        logSaveError(err, accessControl)
         return reject(err)
       }
 
-      console.log('Populated login access control')
-      console.log(accessControl._id)
+      log.info({ accessControlId: accessControl._id }, 'Populated login access control')
       resolve()
     })
   })
@@ -59,11 +68,11 @@ new Promise((resolve, reject) => {
     accessControl.roles = [1]
     accessControl.save((err) => {
       if (err) {
+        logSaveError(err, accessControl)
         return reject(err)
       }
 
-      console.log('Populated login access control')
-      console.log(accessControl._id)
+      log.info({ accessControlId: accessControl._id }, 'Populated login-auth access control')
       resolve()
     })
   })
@@ -77,11 +86,11 @@ new Promise((resolve, reject) => {
     accessControl.roles = [1]
     accessControl.save((err) => {
       if (err) {
+        logSaveError(err, accessControl)
         return reject(err)
       }
 
-      console.log('Populated login access control')
-      console.log(accessControl._id)
+      log.info({ accessControlId: accessControl._id }, 'Populated register access control')
       resolve()
     })
   })
@@ -95,11 +104,11 @@ new Promise((resolve, reject) => {
     accessControl.roles = [1]
     accessControl.save((err) => {
       if (err) {
+        logSaveError(err, accessControl)
         return reject(err)
       }
 
-      console.log('Populated login access control')
-      console.log(accessControl._id)
+      log.info({ accessControlId: accessControl._id }, 'Populated register-submit access control')
       resolve()
     })
   })
@@ -113,11 +122,11 @@ new Promise((resolve, reject) => {
     accessControl.roles = [2, 3, 4, 5]
     accessControl.save((err) => {
       if (err) {
+        logSaveError(err, accessControl)
         return reject(err)
       }
 
-      console.log('Populated dashboard access control')
-      console.log(accessControl._id)
+      log.info({ accessControlId: accessControl._id }, 'Populated dashboard access control')
       resolve()
     })
   })
@@ -126,7 +135,6 @@ new Promise((resolve, reject) => {
   process.exit(0)
 })
 .catch((err) => {
-  console.log('An error occurred')
-  console.log(err)
+  log.info({ err: err }, 'An error occurred. Exiting...')
   process.exit(0)
 })
