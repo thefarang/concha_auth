@@ -3,68 +3,30 @@
 const chai = require('chai')
 const expect = require('chai').expect
 const chaiHttp = require('chai-http')
-const testDb = require('../support/db')
-const app = require('../../app')
+const tools = require('../support/tools')
+
+// Inject app dependencies
+const dbService = require('../mocks/database')
+dbService.connect()
+const app = require('../../app')(dbService)
 
 chai.use(chaiHttp)
 
-const isRolesValidForPermissionAndResource = (array1, array2) => {
-  if (array1.length !== array2.length) {
-    return false
-  }
-
-  for (let i = 0; i < array1.length; i++) {
-    if (array2.indexOf(array1[i]) < 0) {
-      return false
-    }
-  }
-
-  return true
-}
-
-const isAccessControlValid = (permission, resource, roles) => {
-  let expectedRoles = null
-
-  if ((permission === 'get') && (resource === '/')) {
-    expectedRoles = ['guest', 'blogger', 'premium-blogger', 'serviceprovider', 'premium-serviceprovider']
-    if (isRolesValidForPermissionAndResource(roles, expectedRoles)) {
-      return true
-    }
-    return false
-  }
-
-  if (((permission === 'get') && (resource === '/login')) ||
-      ((permission === 'post') && (resource === '/login-auth')) ||
-      ((permission === 'get') && (resource === '/register')) ||
-      ((permission === 'post') && (resource === '/register-submit'))) {
-    expectedRoles = ['guest']
-    if (isRolesValidForPermissionAndResource(roles, expectedRoles)) {
-      return true
-    }
-    return false
-  }
-
-  if ((permission === 'get') && (resource === '/dashboard')) {
-    expectedRoles = ['blogger', 'premium-blogger', 'serviceprovider', 'premium-serviceprovider']
-    if (isRolesValidForPermissionAndResource(roles, expectedRoles)) {
-      return true
-    }
-    return false
-  }
-
-  throw new Error('Permission/Resource/Role not recognised')
-}
-
 /* eslint-disable no-unused-expressions */
 describe('Concha Access Control Endpoint', () => {
-  before(async () => {
-    await testDb.connect()
-    await testDb.clean()
-    await testDb.populate()
+  before(() => {
+    // Cleanse the database
+    dbService.removeAll()
+
+    // Insert the full set of roles into the mock database
+    const roles = tools.getDefinitions()
+    roles.forEach((currentRole) => {
+      dbService.save(currentRole)
+    })
   })
 
-  after(async () => {
-    await testDb.close()
+  after(() => {
+    dbService.disconnect()
   })
 
   it('Should return 200 and all access control data when called without a role', (done) => {
@@ -76,10 +38,9 @@ describe('Concha Access Control Endpoint', () => {
         expect(err).to.be.null
         expect(res).to.have.status(200)
         expect(res).to.be.json
-
         const responseContents = JSON.parse(res.text)
         responseContents.forEach((accessControl, index) => {
-          const isValid = isAccessControlValid(
+          const isValid = tools.isAccessControlValid(
             accessControl.permission,
             accessControl.resource,
             accessControl.roles)
@@ -100,7 +61,7 @@ describe('Concha Access Control Endpoint', () => {
         expect(res).to.have.status(200)
         expect(res).to.be.json
 
-        // Every access control object in the list MUST list the Guest user role
+        // Every access control object in the list MUST reference the Guest user role
         const responseContents = JSON.parse(res.text)
         responseContents.forEach((accessControl, index) => {
           expect(accessControl.roles).to.include('guest')

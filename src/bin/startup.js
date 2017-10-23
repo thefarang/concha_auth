@@ -1,8 +1,10 @@
 'use strict'
 
-const log = require('../lib/log')
-const app = require('../app')
+const log = require('../services/log')
 const http = require('http')
+
+const dbService = require('../services/database/service')
+const bootApp = require('../app')
 
 /**
  * Normalize a port into a number, string, or false.
@@ -62,9 +64,18 @@ const onListening = () => {
   */
 }
 
+// Start the database
+dbService.connect()
+process.on('SIGINT', () => dbService.disconnect())
+
+// Inject app dependencies
+const app = bootApp(dbService)
+
 // Get port from environment and store in Express.
 const port = normalizePort(process.env.PORT || '80')
 app.set('port', port)
+
+// Start the app
 const server = http.createServer(app)
 server.listen(port)
 server.on('error', onError)
